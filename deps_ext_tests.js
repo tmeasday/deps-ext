@@ -56,3 +56,31 @@ Tinytest.add('deps-ext - Deps.CachedValue', function (test) {
   test.equal(runs, 2, "outer comp should rerun because value is different now");
   test.equal(newValue, 2, "outer comp value should be 2 now");
 });
+
+Tinytest.add('deps-ext - Deps.cache inside an autorun', function (test) {
+  var var1 = new ReactiveVar(1);
+  var var2 = new ReactiveVar(1);
+  
+  var cache, result;
+  Deps.autorun(function() {
+    cache = cache || Deps.cache(function() {
+      return var1.get();
+    });
+    
+    result = cache.get() + var2.get();
+  });
+  
+  test.equal(result, 2);
+  
+  var1.set(2);
+  Deps.flush();
+  test.equal(result, 3);
+  
+  var2.set(2);
+  Deps.flush();
+  test.equal(result, 4);
+
+  var1.set(3);
+  Deps.flush();
+  test.equal(result, 5);
+});

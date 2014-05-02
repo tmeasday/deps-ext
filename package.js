@@ -13,6 +13,7 @@ Package.on_use(function (api) {
 
 Package.on_test(function (api) {
   api.use('tinytest');
+  api.use('test-helpers');
   api.use('deps-ext');
   api.add_files('deps_ext_tests.js', 'client');
 });

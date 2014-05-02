@@ -28,6 +28,9 @@ Deps.CachedValue.prototype = {
    * latest value without waiting for a flush.
    */
   get: function () {
+    if (this._comp.stopped)
+      this._compute();
+    
     return this._dep.get();
   },
 
